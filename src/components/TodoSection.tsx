@@ -56,6 +56,10 @@ const TodoSection = ({
     }
   };
 
+  useEffect(() => {
+    inputValueRef.current?.focus();
+  }, [isEditing]);
+
   const renderTodos: ReactNode = todos.map((todo) => {
     return (
       <div
@@ -85,6 +89,9 @@ const TodoSection = ({
                   }}
                   onBlur={() => {
                     handelInputClick(todo.todoId);
+                  }}
+                  onFocus={() => {
+                    inputValueRef.current?.onfocus;
                   }}
                   ref={inputValueRef}
                   type="text"

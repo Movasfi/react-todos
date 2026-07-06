@@ -2,17 +2,21 @@ import AppText from "./AppText";
 import { Plus } from "lucide-react";
 
 interface IProps {
+  isError: boolean;
+  setIsError: (val: boolean) => void;
+  isEditing: string;
   text: string;
   className: string;
   addTodos: (val: string) => void;
   todoStatus?: string;
-  setStatus: (val: string) => void;
+  setIsEditing: (val: string) => void;
 }
 const TodoSectionHeader = ({
   todoStatus,
   addTodos,
+  isError,
+  setIsError,
   className,
-  setStatus,
   text,
 }: IProps) => {
   return (
@@ -20,8 +24,11 @@ const TodoSectionHeader = ({
       <AppText className={className} text={text} />
       <Plus
         onClick={() => {
-          setStatus(todoStatus!);
-          addTodos(todoStatus!);
+          if (isError) {
+            setIsError(true);
+          } else {
+            addTodos(todoStatus!);
+          }
         }}
         color="white"
       />

@@ -1,26 +1,15 @@
-import {
-  type Dispatch,
-  type ReactNode,
-  type SetStateAction,
-} from "react";
+import { type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { ArrowBigDownIcon } from "lucide-react";
 import type { ITodo } from "../interfaces";
-
 interface IProps {
   todoId: string;
   todoStatus?: string;
-  setStatus: (val: string) => void;
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
 }
-const StatusDropdown = ({
-  setTodos,
-  todoId,
-  setStatus,
-  todoStatus,
-}: IProps) => {
+const StatusDropdown = ({ setTodos, todoId, todoStatus }: IProps) => {
   const TaskStatus = {
-    inReview: "🙇 In Review",
-    inProgress: "🏃 In Progress",
+    inreview: "🙇 In Review",
+    inprogress: "🏃 In Progress",
     todo: "📥 To Do",
     done: "☑️ Done",
     canceled: "🗑 Canceled",
@@ -29,12 +18,8 @@ const StatusDropdown = ({
   const renderOptions: ReactNode = Object.entries(TaskStatus).map(
     ([key, name]) => {
       return (
-        <option
-          key={key}
-          value={key === todoStatus ? todoStatus : key}
-          className="bg-white text-gray-800"
-        >
-          {name}
+        <option key={key} value={key} className="bg-white text-gray-800">
+          {todoStatus === key ? name : name}
         </option>
       );
     },
@@ -47,7 +32,6 @@ const StatusDropdown = ({
           <div className="relative w-60">
             <select
               onChange={(e) => {
-                setStatus(e.currentTarget.value!);
                 const curStatus = e.currentTarget.value!;
                 setTodos((pre: ITodo[]) => {
                   return pre.map((data) => {
@@ -61,7 +45,7 @@ const StatusDropdown = ({
                   });
                 });
               }}
-              defaultValue={todoStatus}
+              value={todoStatus}
               className="w-full px-4 py-2.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all cursor-pointer dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
             >
               {renderOptions}

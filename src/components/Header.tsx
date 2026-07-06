@@ -1,7 +1,7 @@
 import { ToggleLeftIcon, ToggleRightIcon } from "lucide-react";
 import AppText from "./AppText";
-import { useEffect, useContext } from "react";
-import { ThemeContext } from "../App";
+import { useContext } from "react";
+import { ThemeContext } from "../customHooks/ThemeContext";
 interface IProps {
   setIsDark: (val: boolean) => void;
 }
@@ -12,13 +12,12 @@ const Header = ({ setIsDark }: IProps) => {
     <div className="flex justify-between ">
       <a href="/">
         <AppText
-          className="underline-0 text-indigo-500 text-4xl decoration-0 cursor-pointer"
+          className="underline text-indigo-500 text-4xl decoration-0 cursor-pointer"
           text="Bit-Todos"
         />
       </a>
       {themeStatus ? (
         <ToggleRightIcon
-          className="cursor-pointer"
           onClick={() => {
             setIsDark(false);
           }}
@@ -26,7 +25,6 @@ const Header = ({ setIsDark }: IProps) => {
         />
       ) : (
         <ToggleLeftIcon
-          className="cursor-pointer"
           onClick={() => {
             setIsDark(true);
           }}

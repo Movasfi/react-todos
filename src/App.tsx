@@ -1,78 +1,25 @@
 import TodoSection from "./components/TodoSection";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import type { ITodo } from "./interfaces/index";
+
 import Header from "./components/Header";
 import { ThemeContext } from "./customHooks/ThemeContext";
 import { getTodos, setTodo, setTheme, getTheme } from "./localstorage";
+import { useTodos } from "./customHooks/useTodos";
+import { useDark } from "./customHooks/useDark";
 
 function App() {
-  const [todos, setTodos] = useState<ITodo[]>(() => {
-    const todo = getTodos("todos");
-    return todo;
-  });
-  const [isDark, setIsDark] = useState<boolean>(() => {
-    const theme = getTheme("theme");
-    return theme;
-  });
-  const [isEditing, setIsEditing] = useState<string>("");
+  const {
+    canceledItems,
+    doneItems,
+    inProgressItems,
+    inReviewItems,
+    todosItems,
+    addTodos,
+    handleOnClick,
+    setTodos,
+    isEditing,
+  } = useTodos();
 
-  useEffect(() => {
-    setTodo("todos", todos);
-  }, [todos]);
-
-  useEffect(() => {
-    setTheme("theme", isDark);
-  }, [isDark]);
-
-  const handleOnClick = (id: string) => {
-    setIsEditing(id);
-  };
-  const todosItems = todos?.filter((da) => {
-    if (da.todoStatus.trim().toLowerCase() === "todo") {
-      return da;
-    }
-    false;
-  });
-
-  const inReviewItems = todos?.filter((da) => {
-    if (da.todoStatus.trim().toLowerCase() === "inreview") {
-      return da;
-    }
-    false;
-  });
-
-  const inProgressItems = todos?.filter((da) => {
-    if (da.todoStatus.trim().toLowerCase() === "inprogress") {
-      return da;
-    }
-    false;
-  });
-  const canceledItems = todos?.filter((da) => {
-    if (da.todoStatus.trim().toLowerCase() === "canceled") {
-      return da;
-    }
-    false;
-  });
-  const doneItems = todos?.filter((da) => {
-    if (da.todoStatus.trim().toLowerCase() === "done") {
-      return da;
-    }
-    false;
-  });
-
-  const addTodos = (status: string) => {
-    const todo: ITodo = {
-      todoName: "hi",
-      todo: ``,
-      todoId: uuidv4(),
-      todoStatus: status,
-    };
-    handleOnClick(todo.todoId);
-    console.log(todo);
-
-    setTodos([...todos, todo]);
-  };
+  const { isDark, setIsDark } = useDark();
 
   return (
     <ThemeContext value={isDark}>

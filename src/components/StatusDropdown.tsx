@@ -1,29 +1,18 @@
-import { type Dispatch, type ReactNode, type SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import { ArrowBigDownIcon } from "lucide-react";
 import type { ITodo } from "../interfaces";
+import { useStatusDropdown } from "../customHooks/useStatusDropdown";
 interface IProps {
   todoId: string;
   todoStatus?: string;
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
 }
 const StatusDropdown = ({ setTodos, todoId, todoStatus }: IProps) => {
-  const TaskStatus = {
-    inreview: "🙇 In Review",
-    inprogress: "🏃 In Progress",
-    todo: "📥 To Do",
-    done: "☑️ Done",
-    canceled: "🗑 Canceled",
-  };
-
-  const renderOptions: ReactNode = Object.entries(TaskStatus).map(
-    ([key, name]) => {
-      return (
-        <option key={key} value={key} className="bg-white text-gray-800">
-          {todoStatus === key ? name : name}
-        </option>
-      );
-    },
-  );
+  const { renderOptions, updateStatusIcon } = useStatusDropdown({
+    setTodos,
+    todoId,
+    todoStatus,
+  });
 
   return (
     <li className="list-none my-4">
@@ -33,17 +22,7 @@ const StatusDropdown = ({ setTodos, todoId, todoStatus }: IProps) => {
             <select
               onChange={(e) => {
                 const curStatus = e.currentTarget.value!;
-                setTodos((pre: ITodo[]) => {
-                  return pre.map((data) => {
-                    if (data.todoId === todoId) {
-                      return {
-                        ...data,
-                        todoStatus: curStatus,
-                      };
-                    }
-                    return data;
-                  });
-                });
+                updateStatusIcon(curStatus);
               }}
               value={todoStatus}
               className="w-full px-4 py-2.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all cursor-pointer dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"

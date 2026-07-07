@@ -6,14 +6,14 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
-import type { ITodo } from "../interfaces";
+import { type ITodo, TaskStatus, priorities } from "../interfaces";
 import Input from "../components/Input";
 import StatusDropdown from "../components/StatusDropdown";
 import { ThemeContext } from "../customHooks/ThemeContext";
+import AppText from "../components/AppText";
+import Swal from "sweetalert2";
 
 interface IProps {
-  isError: boolean;
-  setIsError: (val: boolean) => void;
   todos: ITodo[];
   isEditing: string;
   setTodos: Dispatch<SetStateAction<ITodo[]>>;
@@ -24,13 +24,19 @@ export function useTodoItem({
   setIsEditing,
   setTodos,
   isEditing,
-  setIsError,
   todos,
 }: IProps) {
-  const [inputValue, setInputValue] = useState("");
   const [parent] = useAutoAnimate({ duration: 600, easing: "linear" });
+  const [inputValue, setInputValue] = useState("");
 
   const themeStatus = useContext(ThemeContext);
+  const showError = () => {
+    Swal.fire({
+      title: "Error",
+      text: "Enter something  valid",
+      icon: "error",
+    });
+  };
 
   const handelInputClick = (id: string) => {
     const updatedValue = inputValue.trim();
@@ -48,7 +54,7 @@ export function useTodoItem({
   };
 
   const valiaInput = (value: string) => {
-    if (value.length > 0) {
+    if (value.trim().length > 0) {
       return true;
     }
     return false;
@@ -63,65 +69,77 @@ export function useTodoItem({
       >
         <div>
           <ol className="list-disc list-item">
-            {isCurrentEditing ? (
-              <div>
-                <Input
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const result = valiaInput(e.currentTarget.value);
-                      if (result) {
-                        setInputValue(e.currentTarget.value);
-                        handelInputClick(todo.todoId);
-                      } else {
-                        setIsError(true);
-                      }
-                    }
-                  }}
-                  onChange={(e) => {
-                    if (e.currentTarget.value.length > 0) {
-                      setInputValue(e.currentTarget.value);
-                      setIsError(false);
-                    } else {
-                      setIsError(true);
-                    }
-                  }}
-                  onBlur={(e) => {
-                    const result = valiaInput(e.currentTarget.value);
-                    if (result) {
-                      setInputValue(e.currentTarget.value);
-                      handelInputClick(todo.todoId);
-                    } else {
-                      setIsError(true);
-                    }
-                  }}
-                  type="text"
-                  id="todo"
-                  label="Enter Somethins"
-                  className={`p-3 outline-0 ${!themeStatus ? "text-black" : "text-white"}  border rounded-md`}
-                />
-              </div>
-            ) : (
-              <div>
+            <div className="flex flex-col ">
+              <div className="flex justify-center items-center gap-2">
                 <StatusDropdown
+                  IconsObg={TaskStatus}
                   todoId={todo.todoId}
                   setTodos={setTodos}
                   todoStatus={todo.todoStatus}
                 />
-                <p
-                  className={``}
-                  onClick={() => {
-                    setIsEditing(todo.todoId);
-                  }}
-                >
-                  {todo.todo}
-                </p>
+
+                <StatusDropdown
+                  priortyStatus={todo.priorityLevel}
+                  setTodos={setTodos}
+                  todoId={todo.todoId}
+                  todoStatus={todo.status}
+                  IconsObg={priorities}
+                />
+
+                <div className="flex flex-col items-start gap-3">
+                  {isCurrentEditing ? (
+                    <Input
+                      autoFocus
+                      onKeyUpCapture={(e) => {
+                        if (e.key === "Enter") {
+                          const result = valiaInput(e.currentTarget.value);
+                          if (result) {
+                            setInputValue(e.currentTarget.value);
+                            handelInputClick(todo.todoId);
+                          } else {
+                            showError();
+                          }
+                        }
+                      }}
+                      onChange={(e) => {
+                        if (valiaInput(e.currentTarget.value)) {
+                          setInputValue(e.currentTarget.value);
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const result = valiaInput(e.currentTarget.value);
+                        if (result) {
+                          setInputValue(e.currentTarget.value);
+                          handelInputClick(todo.todoId);
+                        } else {
+                          showError();
+                        }
+                      }}
+                      type="text"
+                      id="todo"
+                      className={`p-3 outline-0 ${!themeStatus ? "text-black" : "text-white"}  border rounded-md`}
+                    />
+                  ) : (
+                    <AppText
+                      className=""
+                      onClick={() => setIsEditing(todo.todoId)}
+                      text={todo.todo}
+                    />
+                  )}
+                </div>
               </div>
-            )}
+            </div>
           </ol>
         </div>
       </div>
     );
   });
-  return { setInputValue, valiaInput, handelInputClick, parent, renderTodos };
+  return {
+    setInputValue,
+    valiaInput,
+    handelInputClick,
+    showError,
+    parent,
+    renderTodos,
+  };
 }

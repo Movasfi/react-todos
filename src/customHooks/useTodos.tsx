@@ -10,6 +10,7 @@ export function useTodos() {
   });
 
   const [isEditing, setIsEditing] = useState<string>("");
+  const [priorityLevel, setPriorityLevel] = useState<string>("");
 
   useEffect(() => {
     setTodo("todos", todos);
@@ -20,12 +21,17 @@ export function useTodos() {
   };
 
   const filterCategory = (cate: string) => {
-    const todosItems = todos?.filter((da) => {
-      if (da.todoStatus.trim().toLowerCase() === cate) {
-        return da;
-      }
-      return false;
-    });
+    const todosItems = todos
+      ?.filter((da) => {
+        if (da.todoStatus.trim().toLowerCase() === cate) {
+          return da;
+        }
+        return false;
+      })
+      .sort((a: ITodo, b: ITodo) => {
+        const rsult = Number(b.priorityLevel) - Number(a.priorityLevel);
+        return rsult;
+      });
     return todosItems;
   };
 
@@ -35,10 +41,11 @@ export function useTodos() {
       todo: ``,
       todoId: uuidv4(),
       todoStatus: status,
+      priorityLevel: "0",
     };
     handleOnClick(todo.todoId);
     console.log(todo);
-
+    setPriorityLevel(todo.priorityLevel);
     setTodos([...todos, todo]);
   };
 
@@ -46,6 +53,8 @@ export function useTodos() {
     isEditing,
     setTodos,
     setIsEditing,
+    priorityLevel,
+    setPriorityLevel,
     handleOnClick,
     inReviewItems: filterCategory("inreview"),
     inProgressItems: filterCategory("inprogress"),

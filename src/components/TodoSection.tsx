@@ -2,7 +2,6 @@ import TodoSectionHeader from "./TodoSectionHeader";
 import type { ITodo } from "../interfaces/index";
 import { type Dispatch, type SetStateAction } from "react";
 import TodoItem from "./TodoItem";
-import { useError } from "../customHooks/useErros";
 
 interface IProps {
   isEditing: string;
@@ -22,12 +21,9 @@ const TodoSection = ({
   setTodos,
   sectionTextHeader,
 }: IProps) => {
-  const { isError, setIsError } = useError();
   return (
     <section className="flex flex-col gap-5 justify-center items-start">
       <TodoSectionHeader
-        isError={isError}
-        setIsError={setIsError}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
         todoStatus={todoStatus}
@@ -37,8 +33,6 @@ const TodoSection = ({
       />
       <hr className=" w-80 text-red-500" />
       <TodoItem
-        isError={isError}
-        setIsError={setIsError}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
         setTodos={setTodos}

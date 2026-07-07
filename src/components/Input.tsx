@@ -6,12 +6,7 @@ interface IProps extends InputHTMLAttributes<HTMLInputElement> {
   ref?: RefObject<HTMLInputElement | null>;
 }
 const Input = ({ ref, className, label, ...rest }: IProps) => {
-  return (
-    <div className="flex flex-col gap-3">
-      <p>{label}</p>
-      <input ref={ref} {...rest} className={className} />
-    </div>
-  );
+  return <input ref={ref} {...rest} className={className} />;
 };
 
 export default Input;

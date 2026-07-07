@@ -18,7 +18,7 @@ const TodoItem = ({ setIsEditing, setTodos, todos, isEditing }: IProps) => {
   });
 
   return (
-    <div ref={parent} className="flex flex-col gap-2 justify-start items-start">
+    <div ref={parent} className="flex flex-col gap-2 justify-start items-start w-full">
       {renderTodos}
     </div>
   );

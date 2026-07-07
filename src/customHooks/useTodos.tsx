@@ -42,6 +42,7 @@ export function useTodos() {
       todoId: uuidv4(),
       todoStatus: status,
       priorityLevel: "0",
+      assignee: "None",
     };
     handleOnClick(todo.todoId);
     console.log(todo);

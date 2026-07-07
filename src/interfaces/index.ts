@@ -1,9 +1,20 @@
+export type Assignee = 'John' | 'Sarah' | 'Michael' | 'Emily' | 'None';
+
 export interface ITodo {
     todoName: string;
     todo: string;
     todoId: string;
     todoStatus: string;
     priorityLevel: string
+    assignee: Assignee
+}
+
+export const Assignees = {
+    none: "None",
+    john: "John",
+    sarah: "Sarah",
+    michael: "Michael",
+    emily: "Emily",
 }
 
 

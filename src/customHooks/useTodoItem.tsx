@@ -6,7 +6,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
-import { type ITodo, TaskStatus, priorities } from "../interfaces";
+import { type ITodo, TaskStatus, priorities, Assignees } from "../interfaces";
 import Input from "../components/Input";
 import StatusDropdown from "../components/StatusDropdown";
 import { ThemeContext } from "../customHooks/ThemeContext";
@@ -65,12 +65,12 @@ export function useTodoItem({
     return (
       <div
         key={todo.todoId}
-        className={`flex   flex-col gap-3 justify-center items-center ${themeStatus ? "text-white" : "text-black"}`}
+        className={`flex  w-full flex-col gap-3 justify-center items-center ${themeStatus ? "text-white" : "text-black"}`}
       >
-        <div>
-          <ol className="list-disc list-item">
-            <div className="flex flex-col ">
-              <div className="flex justify-center items-center gap-2">
+        <div className="w-full">
+          <div className="flex flex-col w-full ">
+            <div className="flex justify-between  items-center w-full gap-2">
+              <div className="flex gap-3 justify-start w-full items-center">
                 <StatusDropdown
                   IconsObg={TaskStatus}
                   todoId={todo.todoId}
@@ -128,8 +128,16 @@ export function useTodoItem({
                   )}
                 </div>
               </div>
+              <StatusDropdown
+                assignee={todo.assignee}
+                priortyStatus={todo.priorityLevel}
+                setTodos={setTodos}
+                todoId={todo.todoId}
+                todoStatus={todo.status}
+                IconsObg={Assignees}
+              />
             </div>
-          </ol>
+          </div>
         </div>
       </div>
     );

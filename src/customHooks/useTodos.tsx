@@ -21,13 +21,12 @@ export function useTodos() {
   };
 
   const filterCategory = (cate: string) => {
-    const todosItems = todos
-      ?.filter((da) => {
-        if (da.todoStatus.trim().toLowerCase() === cate) {
-          return da;
-        }
-        return false;
-      })
+    const todosItems = todos?.filter((da: ITodo) => {
+      if (da.todoStatus.trim().toLowerCase() === cate) {
+        return da;
+      }
+      return false;
+    })
       .sort((a: ITodo, b: ITodo) => {
         const rsult = Number(b.priorityLevel) - Number(a.priorityLevel);
         return rsult;
@@ -42,7 +41,7 @@ export function useTodos() {
       todoId: uuidv4(),
       todoStatus: status,
       priorityLevel: "0",
-      assignee: "None",
+      assignee: [],
     };
     handleOnClick(todo.todoId);
     console.log(todo);

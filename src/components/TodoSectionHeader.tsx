@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import type { ITodo } from "../interfaces";
 import AppText from "./AppText";
 import { Plus } from "lucide-react";
 
@@ -15,6 +17,8 @@ const TodoSectionHeader = ({
   className,
   text,
 }: IProps) => {
+
+
   return (
     <div className="flex justify-between w-80 bg-black p-3 rounded-md">
       <AppText className={className} text={text} />

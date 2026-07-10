@@ -13,12 +13,13 @@ const TodoItem = ({ setIsEditing, setTodos, todos, isEditing }: IProps) => {
   const { parent, renderTodos } = useTodoItem({
     setIsEditing,
     setTodos,
+
     isEditing,
     todos,
   });
 
   return (
-    <div ref={parent} className="flex flex-col gap-2 justify-start items-start w-full">
+    <div ref={parent} className="flex flex-col gap-4 w-full justify-start items-start">
       {renderTodos}
     </div>
   );

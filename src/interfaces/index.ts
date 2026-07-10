@@ -6,7 +6,7 @@ export interface ITodo {
     todoId: string;
     todoStatus: string;
     priorityLevel: string
-    assignee: Assignee
+    assignee: string[]
 }
 
 export const Assignees = {

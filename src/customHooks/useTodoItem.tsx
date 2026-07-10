@@ -65,81 +65,77 @@ export function useTodoItem({
     return (
       <div
         key={todo.todoId}
-        className={`flex  w-full flex-col gap-3 justify-center items-center ${themeStatus ? "text-white" : "text-black"}`}
+        className={`flex gap-3 justify-between w-full items-center  ${themeStatus ? "text-white" : "text-black"}`}
       >
-        <div className="w-full">
-          <div className="flex flex-col w-full ">
-            <div className="flex justify-between  items-center w-full gap-2">
-              <div className="flex gap-3 justify-start w-full items-center">
-                <StatusDropdown
-                  IconsObg={TaskStatus}
-                  todoId={todo.todoId}
-                  setTodos={setTodos}
-                  todoStatus={todo.todoStatus}
-                />
+        <div className="flex justify-center gap-5 items-center">
+          <StatusDropdown
+            IconsObg={TaskStatus}
+            todoId={todo.todoId}
+            setTodos={setTodos}
+            todoStatus={todo.todoStatus}
+          />
 
-                <StatusDropdown
-                  priortyStatus={todo.priorityLevel}
-                  setTodos={setTodos}
-                  todoId={todo.todoId}
-                  todoStatus={todo.status}
-                  IconsObg={priorities}
-                />
+          <StatusDropdown
+            priortyStatus={todo.priorityLevel}
+            setTodos={setTodos}
+            todoId={todo.todoId}
+            todoStatus={todo.status}
+            IconsObg={priorities}
+          />
 
-                <div className="flex flex-col items-start gap-3">
-                  {isCurrentEditing ? (
-                    <Input
-                      autoFocus
-                      onKeyUpCapture={(e) => {
-                        if (e.key === "Enter") {
-                          const result = valiaInput(e.currentTarget.value);
-                          if (result) {
-                            setInputValue(e.currentTarget.value);
-                            handelInputClick(todo.todoId);
-                          } else {
-                            showError();
-                          }
-                        }
-                      }}
-                      onChange={(e) => {
-                        if (valiaInput(e.currentTarget.value)) {
-                          setInputValue(e.currentTarget.value);
-                        }
-                      }}
-                      onBlur={(e) => {
-                        const result = valiaInput(e.currentTarget.value);
-                        if (result) {
-                          setInputValue(e.currentTarget.value);
-                          handelInputClick(todo.todoId);
-                        } else {
-                          showError();
-                        }
-                      }}
-                      type="text"
-                      id="todo"
-                      className={`p-3 outline-0 ${!themeStatus ? "text-black" : "text-white"}  border rounded-md`}
-                    />
-                  ) : (
-                    <AppText
-                      className=""
-                      onClick={() => setIsEditing(todo.todoId)}
-                      text={todo.todo}
-                    />
-                  )}
-                </div>
-              </div>
-              <StatusDropdown
-                assignee={todo.assignee}
-                priortyStatus={todo.priorityLevel}
-                setTodos={setTodos}
-                todoId={todo.todoId}
-                todoStatus={todo.status}
-                IconsObg={Assignees}
-              />
-            </div>
-          </div>
+
+          {isCurrentEditing ? (
+            <Input
+              autoFocus
+              onKeyUpCapture={(e) => {
+                if (e.key === "Enter") {
+                  const result = valiaInput(e.currentTarget.value);
+                  if (result) {
+                    setInputValue(e.currentTarget.value);
+                    handelInputClick(todo.todoId);
+                  } else {
+                    showError();
+                  }
+                }
+              }}
+              onChange={(e) => {
+                if (valiaInput(e.currentTarget.value)) {
+                  setInputValue(e.currentTarget.value);
+                }
+              }}
+              onBlur={(e) => {
+                const result = valiaInput(e.currentTarget.value);
+                if (result) {
+                  setInputValue(e.currentTarget.value);
+                  handelInputClick(todo.todoId);
+                } else {
+                  showError();
+                }
+              }}
+              type="text"
+              id="todo"
+              className={`p-3 outline-0 ${!themeStatus ? "text-black" : "text-white"}  border rounded-md`}
+            />
+          ) : (
+            <AppText
+              className=""
+              onClick={() => setIsEditing(todo.todoId)}
+              text={todo.todo}
+            />
+          )}
         </div>
-      </div>
+
+        <StatusDropdown
+          todos={todos}
+          assignee={todo.assignee}
+          priortyStatus={todo.priorityLevel}
+          setTodos={setTodos}
+          todoId={todo.todoId}
+          todoStatus={todo.status}
+          IconsObg={Assignees}
+        />
+
+      </div >
     );
   });
   return {

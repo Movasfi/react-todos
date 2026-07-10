@@ -22,7 +22,7 @@ const TodoSection = ({
   sectionTextHeader,
 }: IProps) => {
   return (
-    <section className="flex flex-col gap-5 justify-center items-start">
+    <section className="flex flex-col w-full gap-5 justify-center items-start">
       <TodoSectionHeader
         isEditing={isEditing}
         setIsEditing={setIsEditing}
@@ -33,6 +33,7 @@ const TodoSection = ({
       />
       <hr className=" w-80 text-red-500" />
       <TodoItem
+      
         isEditing={isEditing}
         setIsEditing={setIsEditing}
         setTodos={setTodos}

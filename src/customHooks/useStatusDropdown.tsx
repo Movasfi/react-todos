@@ -1,17 +1,15 @@
 import {
-  useEffect,
+  useContext,
   useState,
   type Dispatch,
-  type ReactNode,
   type SetStateAction,
 } from "react";
 import {
   type ITodo,
   priorities,
   TaskStatus,
-  Assignees,
-  type Assignee,
 } from "../interfaces";
+import { AssigneeContext } from "./DataContext";
 
 interface IProps {
   todoId: string;
@@ -36,38 +34,43 @@ export function useStatusDropdown({
 }: IProps) {
   const [isActive, setIsActive] = useState<boolean>(false);
 
+  const assigneesContext = useContext(AssigneeContext)
+  const { newAssignee } = assigneesContext
 
-  const dropDown = (data: Record<string, string>) => {
-    const renderOptions: ReactNode = Object.entries(data).map(([key, name]) => {
+
+  const dropDown = (data: Record<string, string>, showUsers: boolean) => {
+    const renderOptions = Object.entries(data).map(([key, name]) => {
       const currentTodo = todos?.find((t) => t.todoId === todoId);
       const isAdded = currentTodo?.assignee.includes(key);
+
       return (
-        <>
-          {Object.keys(Assignees).includes(key) ? (
-
-            <>
-              <option
-
-                key={key}
-                value={key}
-                className={`p-2 ${isAdded ? "bg-green-100 text-green-800 font-bold" : "text-gray-800"}`}
-                hidden={key === "none"}
-              >
-                {isAdded ? `✓ ${name}` : name}
-              </option>
-
-            </>
-          ) : (
-            <option key={key} value={key} className="bg-white text-gray-800 ">
-              {name.slice(0, 3)}
-              {name.slice(3, 16)}
-            </option>
-          )}
-        </>
+        <option
+          key={key}
+          value={key}
+          className={`p-2 ${isAdded
+            ? "bg-green-100 text-green-800 font-bold"
+            : "text-gray-800"
+            }`}
+          hidden={key === "none"}
+        >
+          {isAdded ? `✓ ${name}` : name}
+        </option>
       );
     });
-    return renderOptions;
+
+    return (
+      <>
+        {renderOptions}
+
+        {showUsers && (
+          <option value="/users">
+            Edit users
+          </option>
+        )}
+      </>
+    );
   };
+
 
   const circelNamesStyle = (todos: ITodo[]) => {
     const curTodo = todos?.find((todo) => todo.todoId === todoId);
@@ -130,7 +133,7 @@ export function useStatusDropdown({
   const updateAssignee = (assignee: string) => {
     setTodos((prevTodos: ITodo[]) => {
       return prevTodos.map((todo) => {
-        if (todo.todoId === todoId && Object.keys(Assignees).includes(assignee)) {
+        if (todo.todoId === todoId && Object.keys(newAssignee).includes(assignee)) {
 
           const updatedAssignees = Array.from(new Set([...todo.assignee, assignee]));
 
@@ -143,10 +146,7 @@ export function useStatusDropdown({
       });
     });
   };
-  useEffect(() => {
-    console.log(todos);
 
-  })
 
   const deleteAssignee = (assignee: string) => {
 
@@ -174,7 +174,7 @@ export function useStatusDropdown({
   }
   const IconStatusKeys = Object.keys(TaskStatus);
   const IconPriorityKeys = Object.keys(priorities);
-  const IconAssignees = Object.keys(Assignees);
+  const IconAssignees = Object.keys(newAssignee);
 
 
 

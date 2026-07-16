@@ -3,12 +3,14 @@ import { v4 as uuidv4 } from "uuid";
 import type { ITodo } from "../interfaces";
 import { getTodos, setTodo } from "../localstorage";
 
-export function useTodos() {
+export function useTodos(data?: {}) {
   const [todos, setTodos] = useState<ITodo[]>(() => {
     const todo = getTodos("todos");
     return todo;
   });
-
+  useEffect(() => {
+    console.log("usetodos", todos);
+  })
   const [isEditing, setIsEditing] = useState<string>("");
   const [priorityLevel, setPriorityLevel] = useState<string>("");
 
@@ -52,6 +54,8 @@ export function useTodos() {
   return {
     isEditing,
     setTodos,
+    todos,
+    data,
     setIsEditing,
     priorityLevel,
     setPriorityLevel,

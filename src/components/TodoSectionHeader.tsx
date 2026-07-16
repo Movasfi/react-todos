@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import type { ITodo } from "../interfaces";
 import AppText from "./AppText";
 import { Plus } from "lucide-react";
 

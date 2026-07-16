@@ -1,4 +1,4 @@
-import type { ITodo } from "./interfaces";
+import { Assignees, type ITodo } from "./interfaces";
 
 export const setTodo = (key: string, data: ITodo[]): void => {
   try {
@@ -29,6 +29,28 @@ export const getTheme = (key: string) => {
   try {
     const theme = localStorage.getItem(key);
     return theme ? JSON.parse(theme) : false;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+export const getAssignee = (key: string) => {
+  try {
+    const assignee = localStorage.getItem(key)
+    return assignee ? JSON.parse(assignee) : Assignees
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+
+export const setAssignee = (key: string, val: {}) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
   } catch (error) {
     console.error(error);
   }

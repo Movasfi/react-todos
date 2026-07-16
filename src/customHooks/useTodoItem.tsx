@@ -1,6 +1,7 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   useContext,
+  useEffect,
   useState,
   type Dispatch,
   type ReactNode,
@@ -12,6 +13,7 @@ import StatusDropdown from "../components/StatusDropdown";
 import { ThemeContext } from "../customHooks/ThemeContext";
 import AppText from "../components/AppText";
 import Swal from "sweetalert2";
+import { AssigneeContext } from "./DataContext";
 
 interface IProps {
   todos: ITodo[];
@@ -38,6 +40,8 @@ export function useTodoItem({
     });
   };
 
+
+
   const handelInputClick = (id: string) => {
     const updatedValue = inputValue.trim();
 
@@ -60,15 +64,20 @@ export function useTodoItem({
     return false;
   };
 
+  const assigneesContext = useContext(AssigneeContext)
+  const { newAssignee } = assigneesContext
+
+
   const renderTodos: ReactNode = todos?.map((todo: any) => {
     const isCurrentEditing = isEditing === todo.todoId;
     return (
       <div
         key={todo.todoId}
-        className={`flex gap-3 justify-between w-full items-center  ${themeStatus ? "text-white" : "text-black"}`}
+        className={`flex gap-3 justify-between w-full items-center  `}
       >
         <div className="flex justify-center gap-5 items-center">
           <StatusDropdown
+            editUser={false}
             IconsObg={TaskStatus}
             todoId={todo.todoId}
             setTodos={setTodos}
@@ -76,6 +85,7 @@ export function useTodoItem({
           />
 
           <StatusDropdown
+            editUser={false}
             priortyStatus={todo.priorityLevel}
             setTodos={setTodos}
             todoId={todo.todoId}
@@ -114,7 +124,7 @@ export function useTodoItem({
               }}
               type="text"
               id="todo"
-              className={`p-3 outline-0 ${!themeStatus ? "text-black" : "text-white"}  border rounded-md`}
+              className={`p-3 outline-0  border rounded-md`}
             />
           ) : (
             <AppText
@@ -126,13 +136,14 @@ export function useTodoItem({
         </div>
 
         <StatusDropdown
+          editUser={true}
           todos={todos}
           assignee={todo.assignee}
           priortyStatus={todo.priorityLevel}
           setTodos={setTodos}
           todoId={todo.todoId}
           todoStatus={todo.status}
-          IconsObg={Assignees}
+          IconsObg={newAssignee}
         />
 
       </div >

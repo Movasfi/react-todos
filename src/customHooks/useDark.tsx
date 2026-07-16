@@ -4,7 +4,7 @@ import { getTheme, setTheme } from "../localstorage";
 export function useDark() {
   const [isDark, setIsDark] = useState<boolean>(() => {
     const theme = getTheme("theme");
-    return theme;
+    return theme === "true" || theme === true;
   });
   useEffect(() => {
     setTheme("theme", isDark);

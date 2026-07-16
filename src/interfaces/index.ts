@@ -9,14 +9,13 @@ export interface ITodo {
     assignee: string[]
 }
 
-export const Assignees = {
+export const Assignees: Record<string, string> = {
     none: "None",
     john: "John",
     sarah: "Sarah",
     michael: "Michael",
     emily: "Emily",
-}
-
+};
 
 export const TaskStatus = {
     inreview: "🙇 In Review",

@@ -1,6 +1,6 @@
 import type { ITodo } from "../interfaces";
 import { useTodoItem } from "../customHooks/useTodoItem";
-import type { Dispatch, SetStateAction } from "react";
+import { memo, type Dispatch, type SetStateAction } from "react";
 
 interface IProps {
   todos: ITodo[];
@@ -25,4 +25,4 @@ const TodoItem = ({ setIsEditing, setTodos, todos, isEditing }: IProps) => {
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);

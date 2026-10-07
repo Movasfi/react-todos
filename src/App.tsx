@@ -1,9 +1,7 @@
 import Header from "./components/Header";
-import { Outlet, RouterProvider } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useDark } from "./customHooks/useDark";
 import router from "./routes";
-import { useTodos } from "./customHooks/useTodos";
-import { useContext, useEffect, useState } from "react";
 import { AssigneeProvider } from "./customHooks/DataContext";
 
 function App() {

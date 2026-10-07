@@ -1,3 +1,4 @@
+import { memo } from "react";
 import AppText from "./AppText";
 import { Plus } from "lucide-react";
 
@@ -30,4 +31,4 @@ const TodoSectionHeader = ({
   );
 };
 
-export default TodoSectionHeader;
+export default memo(TodoSectionHeader);

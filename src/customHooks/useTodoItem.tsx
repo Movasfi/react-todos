@@ -1,16 +1,17 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
+  useCallback,
   useContext,
-  useEffect,
+  // useEffect,
   useState,
   type Dispatch,
   type ReactNode,
   type SetStateAction,
 } from "react";
-import { type ITodo, TaskStatus, priorities, Assignees } from "../interfaces";
+import { type ITodo, TaskStatus, priorities } from "../interfaces";
 import Input from "../components/Input";
 import StatusDropdown from "../components/StatusDropdown";
-import { ThemeContext } from "../customHooks/ThemeContext";
+// import { ThemeContext } from "../customHooks/ThemeContext";
 import AppText from "../components/AppText";
 import Swal from "sweetalert2";
 import { AssigneeContext } from "./DataContext";
@@ -31,7 +32,7 @@ export function useTodoItem({
   const [parent] = useAutoAnimate({ duration: 600, easing: "linear" });
   const [inputValue, setInputValue] = useState("");
 
-  const themeStatus = useContext(ThemeContext);
+  // const themeStatus = useContext(ThemeContext);
   const showError = () => {
     Swal.fire({
       title: "Error",
@@ -42,27 +43,26 @@ export function useTodoItem({
 
 
 
-  const handelInputClick = (id: string) => {
-    const updatedValue = inputValue.trim();
+  const handelInputClick = useCallback(
+    (id: string) => {
+      const updatedValue = inputValue.trim();
 
-    setTodos((pre) => {
-      return pre.map((data: ITodo) => {
-        if (data.todoId === id) {
-          return { ...data, todo: updatedValue };
-        }
-        return data;
-      });
-    });
+      setTodos((prev) =>
+        prev.map((data) =>
+          data.todoId === id
+            ? { ...data, todo: updatedValue }
+            : data
+        )
+      );
 
-    setIsEditing("");
-  };
+      setIsEditing("");
+    },
+    [inputValue, setTodos, setIsEditing]
+  );
 
-  const valiaInput = (value: string) => {
-    if (value.trim().length > 0) {
-      return true;
-    }
-    return false;
-  };
+  const valiaInput = useCallback((value: string) => {
+    return value.trim().length > 0;
+  }, []);
 
   const assigneesContext = useContext(AssigneeContext)
   const { newAssignee } = assigneesContext

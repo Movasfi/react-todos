@@ -1,6 +1,6 @@
 import TodoSectionHeader from "./TodoSectionHeader";
 import type { ITodo } from "../interfaces/index";
-import { type Dispatch, type SetStateAction } from "react";
+import { memo, type Dispatch, type SetStateAction } from "react";
 import TodoItem from "./TodoItem";
 
 interface IProps {
@@ -43,4 +43,4 @@ const TodoSection = ({
   );
 };
 
-export default TodoSection;
+export default memo(TodoSection);

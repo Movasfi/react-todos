@@ -1,4 +1,4 @@
-import { useContext, useEffect, type Dispatch, type SetStateAction } from "react";
+import { memo, useContext, useEffect, type Dispatch, type SetStateAction } from "react";
 import { type ITodo } from "../interfaces";
 import { useStatusDropdown } from "../customHooks/useStatusDropdown";
 import { useNavigate } from "react-router-dom";
@@ -117,4 +117,4 @@ const StatusDropdown = ({
   );
 };
 
-export default StatusDropdown;
+export default memo(StatusDropdown);

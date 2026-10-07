@@ -1,13 +1,10 @@
-import { useOutletContext } from "react-router-dom";
 import TodoSection from "../components/TodoSection";
 import { Priority } from "../customHooks/PriorityContext";
 import { ThemeContext } from "../customHooks/ThemeContext";
 import { useDark } from "../customHooks/useDark";
 import { useTodos } from "../customHooks/useTodos";
 
-interface IProps {
 
-}
 const TodoPage = () => {
 
 

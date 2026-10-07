@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import type { ITodo } from "../interfaces";
 import { getTodos, setTodo } from "../localstorage";
@@ -8,9 +8,6 @@ export function useTodos(data?: {}) {
     const todo = getTodos("todos");
     return todo;
   });
-  useEffect(() => {
-    console.log("usetodos", todos);
-  })
   const [isEditing, setIsEditing] = useState<string>("");
   const [priorityLevel, setPriorityLevel] = useState<string>("");
 
@@ -18,38 +15,44 @@ export function useTodos(data?: {}) {
     setTodo("todos", todos);
   }, [todos]);
 
-  const handleOnClick = (id: string) => {
-    setIsEditing(id);
-  };
+  const handleOnClick = useCallback((id: string) => (
+    setIsEditing(id)
+  ), [isEditing])
 
-  const filterCategory = (cate: string) => {
-    const todosItems = todos?.filter((da: ITodo) => {
-      if (da.todoStatus.trim().toLowerCase() === cate) {
-        return da;
-      }
-      return false;
-    })
-      .sort((a: ITodo, b: ITodo) => {
-        const rsult = Number(b.priorityLevel) - Number(a.priorityLevel);
-        return rsult;
-      });
-    return todosItems;
-  };
+  const filterCategory = useCallback(
+    (cate: string) => {
+      return todos
+        ?.filter(
+          (todo: ITodo) =>
+            todo.todoStatus?.trim().toLowerCase() === cate?.trim().toLowerCase()
+        )
+        ?.sort(
+          (a: ITodo, b: ITodo) =>
+            Number(b.priorityLevel) - Number(a.priorityLevel)
+        );
+    },
+    [todos]
+  );
+  
 
-  const addTodos = (status: string) => {
-    const todo: ITodo = {
-      todoName: "hi",
-      todo: ``,
-      todoId: uuidv4(),
-      todoStatus: status,
-      priorityLevel: "0",
-      assignee: [],
-    };
-    handleOnClick(todo.todoId);
-    console.log(todo);
-    setPriorityLevel(todo.priorityLevel);
-    setTodos([...todos, todo]);
-  };
+  const addTodos = useCallback(
+    (status: string) => {
+      const todo: ITodo = {
+        todoName: "hi",
+        todo: "",
+        todoId: uuidv4(),
+        todoStatus: status,
+        priorityLevel: "0",
+        assignee: [],
+      };
+
+      handleOnClick(todo.todoId);
+      setPriorityLevel(todo.priorityLevel);
+
+      setTodos((prevTodos) => [...prevTodos, todo]);
+    },
+    [handleOnClick, setPriorityLevel, setTodos]
+  );
 
   return {
     isEditing,

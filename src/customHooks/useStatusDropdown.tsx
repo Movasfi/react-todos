@@ -1,5 +1,7 @@
 import {
+  useCallback,
   useContext,
+  useMemo,
   useState,
   type Dispatch,
   type SetStateAction,
@@ -92,7 +94,7 @@ export function useStatusDropdown({
   };
 
 
-  const SelectValueElement = () => {
+  const SelectValueElement = useMemo(() => {
     let value: string = "";
     if (todoStatus && Object.keys(IconsObg).includes(todoStatus)) {
       value = todoStatus;
@@ -102,35 +104,44 @@ export function useStatusDropdown({
       value = priortyStatus!;
     }
     return value;
-  };
+  }, [todoStatus, assignee, priortyStatus, IconsObg])
 
-  const updateStatusIcon = (curStatus: string) => {
-    setTodos((pre: ITodo[]) => {
-      return pre.map((data) => {
-        if (data.todoId === todoId) {
-          return {
-            ...data,
-            todoStatus: curStatus,
-          };
-        }
-        return data;
+  const updateStatusIcon = useCallback(
+    (curStatus: string) => {
+      setTodos((prev) =>
+        prev.map((data) =>
+          data.todoId === todoId
+            ? { ...data, todoStatus: curStatus }
+            : data
+        )
+      );
+    },
+    [todoId, setTodos]
+  );
+
+  const updatePriorityLevel = useCallback(
+    (levelStatus: string) => {
+      setTodos((prevTodos: ITodo[]) => {
+        return prevTodos.map((data) => {
+          if (
+            data.todoId === todoId &&
+            Object.keys(priorities).includes(levelStatus)
+          ) {
+            return {
+              ...data,
+              priorityLevel: levelStatus,
+            };
+          }
+
+          return data;
+        });
       });
-    });
-  };
-
-  const updatePriorityLevel = (levelStatus: string) => {
-    setTodos((sta: ITodo[]) => {
-      return sta.map((data) => {
-        if (data.todoId === todoId && Object.keys(priorities).includes(levelStatus)) {
-          return { ...data, priorityLevel: levelStatus };
-        }
-        return data;
-      });
-    });
-  };
+    },
+    [todoId, setTodos]
+  );
 
 
-  const updateAssignee = (assignee: string) => {
+  const updateAssignee = useCallback((assignee: string) => {
     setTodos((prevTodos: ITodo[]) => {
       return prevTodos.map((todo) => {
         if (todo.todoId === todoId && Object.keys(newAssignee).includes(assignee)) {
@@ -145,7 +156,7 @@ export function useStatusDropdown({
         return todo;
       });
     });
-  };
+  }, [todoId, setTodos])
 
 
   const deleteAssignee = (assignee: string) => {
